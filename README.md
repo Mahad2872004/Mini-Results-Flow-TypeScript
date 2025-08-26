@@ -61,12 +61,16 @@ Now open http://localhost:5173
 🧩 How It Works
 
 Step 0 → Displays the FormStep for user input.
+
 Steps 1–6 → Each step displays a ResultCard with unique content from cardData.js.
+
 Step 7 → Shows the SalesCard (final screen).
 
 Navigation
 
 Next → Moves to the next step
+
+
 Back → Returns to the previous step
 
 🌐 Live Demo

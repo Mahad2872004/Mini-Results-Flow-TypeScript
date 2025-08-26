@@ -64,7 +64,7 @@ const SalesCard = () => {
         <div className="bg-white rounded-3xl shadow-lg p-8 mb-6">
           <div className="flex justify-center items-center mb-4">
             <img
-              src="../../public/images/dart.jpg"
+              src="/images/dart.jpg"
               alt="Target icon with a dart"
               className="w-10 h-10 justify-center" // Tailwind classes for width and height
             />

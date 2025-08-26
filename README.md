@@ -32,41 +32,41 @@ I designed the app with reusable components, clean structure, and easy navigatio
 
 🔹 Step 1 – Setting Up Project
 
-1:Created a React app using Vite for a fast and lightweight development environment.
+1: Created a React app using Vite for a fast and lightweight development environment.
 
-2:Installed Tailwind CSS for styling.
+2: Installed Tailwind CSS for styling.
 
 🔹 Step 2 – Building Components
 
-1:FormStep → built the initial form to collect user input.
+1: FormStep → built the initial form to collect user input.
 
-2:ResultCard → made it a reusable component so all 6 cards share the same structure but display different content via props.
+2: ResultCard → made it a reusable component so all 6 cards share the same structure but display different content via props.
 
-3:SalesCard → created as the final screen to wrap up the flow.
+3: SalesCard → created as the final screen to wrap up the flow.
 
 🔹 Step 3 – Managing Data
 
-1:Created a cardData.js file where all card-related data is stored.
+1: Created a cardData.js file where all card-related data is stored.
 
-2:Used props to pass data from cardData.js into the ResultCard.
+2: Used props to pass data from cardData.js into the ResultCard.
 
-3:This way, I avoided repeating code and made the app more scalable.
+3: This way, I avoided repeating code and made the app more scalable.
 
 🔹 Step 4 – Navigation Logic
 
-1:Controlled steps using state (useState) inside App.jsx.
+1: Controlled steps using state (useState) inside App.jsx.
 
-2:Added Next and Back buttons for smooth navigation.
+2: Added Next and Back buttons for smooth navigation.
 
-3:Set up conditions so step 0 shows the form, steps 1–6 show result cards, and step 7 shows the sales card.
+3: Set up conditions so step 0 shows the form, steps 1–6 show result cards, and step 7 shows the sales card.
 
 🔹 Step 5 – Final Touches
 
-1:Structured the code into clear folders (components, data).
+1: Structured the code into clear folders (components, data).
 
-2:Ensured UI consistency with Tailwind classes.
+2: Ensured UI consistency with Tailwind classes.
 
-3:Deployed the app online for public access.
+3: Deployed the app online for public access.
 
 Installation & Setup
 

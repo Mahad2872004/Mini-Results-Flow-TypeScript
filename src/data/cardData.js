@@ -1,4 +1,4 @@
-// src/data/cardData.js
+
 const getCardData = (formData) => [
   {
     title: "Body Fat % Insight",

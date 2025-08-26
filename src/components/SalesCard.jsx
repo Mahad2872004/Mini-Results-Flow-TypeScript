@@ -79,7 +79,7 @@ const SalesCard = () => {
               {/* Before Image */}
               <div className="text-center">
                 <img
-                  src="../../public/images/obese-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
+                  src="/images/obese-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
                   alt="Before"
                   className="w-28 h-40 object-cover rounded-2xl shadow-md"
                 />
@@ -91,7 +91,7 @@ const SalesCard = () => {
               {/* After Image */}
               <div className="text-center">
                 <img
-                  src="../../public/images/slim-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
+                  src="/images/slim-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
                   alt="After"
                   className="w-28 h-40 object-cover rounded-2xl shadow-md"
                 />
@@ -223,7 +223,7 @@ const SalesCard = () => {
 
               <div className="flex items-start space-x-3">
                 <img
-                  src="../../public/images/heart-pot.webp"
+                  src="/images/heart-pot.webp"
                   alt="Recipes"
                   className="w-8 h-8 object-contain"
                 />
@@ -260,7 +260,7 @@ const SalesCard = () => {
 
           <div className="flex justify-center mb-2 ">
             <img
-              src="../../public/images/pubmed-logo-b.svg"
+              src="/images/pubmed-logo-b.svg"
               alt="Published Content"
               className="w-40 h-10 object-contain"
             />
@@ -283,7 +283,7 @@ const SalesCard = () => {
 
           <div className="flex justify-center mb-2">
             <img
-              src="../../public/images/mayo-clinic-b.webp"
+              src="/images/mayo-clinic-b.webp"
               alt="Published Content"
               className="w-10 h-10 object-contain"
             />
@@ -440,7 +440,7 @@ const SalesCard = () => {
           </div>
           <div className="">
             <img
-              src="../../public/images/60-day-guarantee.webp"
+              src="/images/60-day-guarantee.webp"
               alt="icon"
               className="w-50 h-25 object-contain"
             />

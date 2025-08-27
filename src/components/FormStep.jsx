@@ -30,17 +30,21 @@ const FormStep = ({ onNext }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
-      <div className="max-w-md mx-auto">
+      <div className="max-w-md w-full mx-auto">
         <div className="bg-white rounded-3xl shadow-lg p-8">
           <h1 className="text-2xl font-bold text-center mb-2">
             <span className="text-teal-500">KETO</span>
             <span className="text-gray-800">SLIM</span>
           </h1>
-          <p className="text-gray-600 text-center mb-8">Let's get your personalized results</p>
-          
+          <p className="text-gray-600 text-center mb-8">
+            Let's get your personalized results
+          </p>
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">Gender</label>
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Gender
+              </label>
               <div className="flex gap-4">
                 <label className="flex items-center">
                   <input
@@ -48,7 +52,9 @@ const FormStep = ({ onNext }) => {
                     name="gender"
                     value="male"
                     checked={formData.gender === "male"}
-                    onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, gender: e.target.value })
+                    }
                     className="mr-2 text-teal-500 focus:ring-teal-500"
                   />
                   Male
@@ -59,7 +65,9 @@ const FormStep = ({ onNext }) => {
                     name="gender"
                     value="female"
                     checked={formData.gender === "female"}
-                    onChange={(e) => setFormData({...formData, gender: e.target.value})}
+                    onChange={(e) =>
+                      setFormData({ ...formData, gender: e.target.value })
+                    }
                     className="mr-2 text-teal-500 focus:ring-teal-500"
                   />
                   Female
@@ -76,8 +84,16 @@ const FormStep = ({ onNext }) => {
                 min="0"
                 max="100"
                 value={formData.bodyFatPercent}
-                onChange={(e) => setFormData({...formData, bodyFatPercent: parseInt(e.target.value)})}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb:bg-teal-500"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    bodyFatPercent: parseInt(e.target.value),
+                  })
+                }
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-black"
+                style={{
+                  background: `linear-gradient(to right, #319795 0%, #319795 ${formData.bodyFatPercent}%, #d1d5db ${formData.bodyFatPercent}%, #d1d5db 100%)`,
+                }}
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>0%</span>
@@ -95,8 +111,15 @@ const FormStep = ({ onNext }) => {
                 max="40"
                 step="0.1"
                 value={formData.BMI}
-                onChange={(e) => setFormData({...formData, BMI: parseFloat(e.target.value)})}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb:bg-teal-500"
+                onChange={(e) =>
+                  setFormData({ ...formData, BMI: parseFloat(e.target.value) })
+                }
+                className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-black"
+                style={{
+                  background: `linear-gradient(to right, #319795 0%, #319795 ${
+                    (formData.BMI / 40) * 100
+                  }%, #d1d5db ${(formData.BMI / 40) * 100}%, #d1d5db 100%)`,
+                }}
               />
               <div className="flex justify-between text-xs text-gray-500 mt-1">
                 <span>0</span>
@@ -105,11 +128,18 @@ const FormStep = ({ onNext }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Daily Calorie Target</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Daily Calorie Target
+              </label>
               <input
                 type="number"
                 value={formData.calorieTarget || ""}
-                onChange={(e) => setFormData({...formData, calorieTarget: parseInt(e.target.value) || 0})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    calorieTarget: parseInt(e.target.value) || 0,
+                  })
+                }
                 className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Enter daily calorie target"
                 min="0"
@@ -117,10 +147,17 @@ const FormStep = ({ onNext }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Cups of Water Per Day</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Cups of Water Per Day
+              </label>
               <select
                 value={formData.waterIntake}
-                onChange={(e) => setFormData({...formData, waterIntake: parseInt(e.target.value)})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    waterIntake: parseInt(e.target.value),
+                  })
+                }
                 className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 <option value={0}>Select cups per day</option>
@@ -132,11 +169,18 @@ const FormStep = ({ onNext }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Weekly Weight Loss Goal (lbs)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Weekly Weight Loss Goal (lbs)
+              </label>
               <input
                 type="number"
                 value={formData.weightLossRate || ""}
-                onChange={(e) => setFormData({...formData, weightLossRate: parseFloat(e.target.value) || 0})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    weightLossRate: parseFloat(e.target.value) || 0,
+                  })
+                }
                 className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Enter weekly weight loss goal"
                 min="0"
@@ -145,11 +189,18 @@ const FormStep = ({ onNext }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Days to See Results</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Days to See Results
+              </label>
               <input
                 type="number"
                 value={formData.seeResultsDays || ""}
-                onChange={(e) => setFormData({...formData, seeResultsDays: parseInt(e.target.value) || 0})}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    seeResultsDays: parseInt(e.target.value) || 0,
+                  })
+                }
                 className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                 placeholder="Enter days to see results"
                 min="1"
@@ -161,8 +212,8 @@ const FormStep = ({ onNext }) => {
               disabled={!isFormValid()}
               className={`w-full font-semibold py-4 rounded-2xl transition-colors duration-200 shadow-lg ${
                 isFormValid()
-                  ? 'bg-teal-500 hover:bg-teal-600 text-white'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? "bg-teal-500 hover:bg-teal-600 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
               Get My Results

@@ -111,7 +111,7 @@ const SalesCard = () => {
                 <div className="mb-3">
                   <div className="font-medium text-gray-700">Energy Levels</div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-1/4 h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-1/4 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
 
@@ -120,7 +120,7 @@ const SalesCard = () => {
                     Physical Health
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-1/6 h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-1/6 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
 
@@ -129,7 +129,7 @@ const SalesCard = () => {
                     Metabolism Speed
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-1/6 h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-1/6 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
               </div>
@@ -141,7 +141,7 @@ const SalesCard = () => {
                 <div className="mb-3">
                   <div className="font-medium text-gray-700">Energy Levels</div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-5/6 h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-5/6 h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
 
@@ -150,7 +150,7 @@ const SalesCard = () => {
                     Physical Health
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-full h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-full h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
 
@@ -159,7 +159,7 @@ const SalesCard = () => {
                     Metabolism Speed
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div className="w-full h-2 bg-orange-400 rounded-full"></div>
+                    <div className="w-full h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
               </div>

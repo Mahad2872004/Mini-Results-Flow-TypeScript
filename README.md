@@ -71,7 +71,7 @@ I designed the app with reusable components, clean structure, and easy navigatio
 Installation & Setup
 
 # Clone the repository
-git clone https://github.com/your-username/mini-results-flow.git
+git clone https://github.com/Mahad2872004/Mini-Results-Flow-React.git
 cd mini-results-flow
 
 # Install dependencies

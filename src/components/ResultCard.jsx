@@ -23,68 +23,45 @@ const ResultCard = ({
   image,
 }) => {
   const totalSteps = 6;
-  
 
-  // Get icon based on step
-  const getIcon = () => {
-    switch (step) {
-      case 1:
-        return <Scale className="w-12 h-12 text-gray-400" />;
-      case 2:
-        return <BarChart3 className="w-12 h-12 text-gray-400" />;
-      case 3:
-        return <Flame className="w-12 h-12 text-gray-400" />;
-      case 4:
-        return <Droplets className="w-12 h-12 text-gray-400" />;
-      case 5:
-        return <TrendingDown className="w-12 h-12 text-gray-400" />;
-      case 6:
-        return <Clock className="w-12 h-12 text-gray-400" />;
-      default:
-        return <Scale className="w-12 h-12 text-gray-400" />;
-    }
+  const icons = {
+    1: <Scale className="w-12 h-12 text-gray-400" />,
+    2: <BarChart3 className="w-12 h-12 text-gray-400" />,
+    3: <Flame className="w-12 h-12 text-gray-400" />,
+    4: <Droplets className="w-12 h-12 text-gray-400" />,
+    5: <TrendingDown className="w-12 h-12 text-gray-400" />,
+    6: <Clock className="w-12 h-12 text-gray-400" />,
   };
 
-  // Get callout color based on content
   const getCalloutColor = () => {
     if (
-      callout.includes("Almost Healthy") ||
-      callout.includes("strong") ||
-      callout.includes("faster")
+      callout?.includes("Almost Healthy") ||
+      callout?.includes("strong") ||
+      callout?.includes("faster")
     ) {
       return "text-green-600";
     }
     if (
-      callout.includes("Obese") ||
-      callout.includes("closer") ||
-      callout.includes("hydration")
+      callout?.includes("Obese") ||
+      callout?.includes("closer") ||
+      callout?.includes("hydration")
     ) {
       return "text-orange-600";
     }
     return "text-teal-600";
   };
 
-  // Character illustrations for body fat card
-  const renderCharacters = () => {
-    if (step !== 1) return null;
-
-    return <div className="flex justify-center items-end mb-8 space-x-4"></div>;
-  };
-
-  // Parse headline to highlight percentage/numbers
   const parseHeadline = (text) => {
-    const cleanText = text.replace(/[⚖️📊🔥💧📉⏳]/g, "").trim();
-    const parts = cleanText.split(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?)/);
-    return parts.map((part, index) => {
-      if (/\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?/.test(part)) {
-        return (
-          <span key={index} className="text-orange-500">
-            {part}
-          </span>
-        );
-      }
-      return part;
-    });
+    const clean = text.replace(/[⚖️📊🔥💧📉⏳]/g, "").trim();
+    return clean.split(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?)/).map((part, i) =>
+      /\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?/.test(part) ? (
+        <span key={i} className="text-orange-500">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
   };
 
   return (
@@ -97,25 +74,23 @@ const ResultCard = ({
     >
       {/* Header */}
       <div className="max-w-md mx-auto mb-6">
-        <div className="flex items-center justify-center mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">
-              <span className="text-teal-500">KETO</span>
-              <span className="text-gray-800">SLIM</span>
-            </h1>
-          </div>
+        <div className="flex justify-center mb-4">
+          <h1 className="text-2xl font-bold">
+            <span className="text-teal-500">KETO</span>
+            <span className="text-gray-800">SLIM</span>
+          </h1>
         </div>
 
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-teal-500 text-lg font-medium">Your Results</h2>
           <div className="flex space-x-2">
-            {Array.from({ length: totalSteps }).map((_, idx) => (
+            {Array.from({ length: totalSteps }, (_, idx) => (
               <div
                 key={idx}
                 className={`w-2 h-2 rounded-full ${
                   idx + 1 <= step ? "bg-teal-500" : "bg-gray-300"
                 }`}
-              ></div>
+              />
             ))}
           </div>
         </div>
@@ -124,13 +99,13 @@ const ResultCard = ({
       {/* Main Card */}
       <div className="max-w-md mx-auto">
         <motion.div
-          className="bg-white rounded-3xl shadow-lg p-8 flex flex-col justify-between h-[700px]" // fixed height for all cards
+          className="bg-white rounded-3xl shadow-lg p-8 flex flex-col justify-between h-[700px]"
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
         >
           {/* Icon */}
-          <div className="flex justify-center mb-4">{getIcon()}</div>
+          <div className="flex justify-center mb-4">{icons[step]}</div>
 
           {/* Title */}
           <div className="text-center mb-6">
@@ -140,7 +115,7 @@ const ResultCard = ({
             <p className="text-gray-600 font-medium">Here's Why That Matters</p>
           </div>
 
-          {/* Image  */}
+          {/* Image */}
           {image && (
             <div className="flex justify-center mb-6">
               <img
@@ -151,10 +126,7 @@ const ResultCard = ({
             </div>
           )}
 
-          {/* Character Illustrations (only for body fat card) */}
-          {renderCharacters()}
-
-          {/* Description Text */}
+          {/* Description */}
           <div className="text-sm text-gray-600 leading-relaxed mb-8 space-y-3">
             <p>{copy}</p>
             {callout && (
@@ -162,33 +134,32 @@ const ResultCard = ({
             )}
           </div>
 
-          {/* Next / Back Buttons */}
+          {/* Navigation Buttons */}
           <div className="flex gap-4 mt-auto">
-  {step > 1 && (
-    <motion.button
-      onClick={onBack}
-      className="w-1/2 bg-white border-2 border-teal-500 text-teal-500 font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 hover:bg-teal-50 transition-colors"
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <ChevronLeft className="w-5 h-5" />
-      <span className="truncate">{prevTitle}</span>
-    </motion.button>
-  )}
+            {step > 1 && (
+              <motion.button
+                onClick={onBack}
+                className="w-1/2 bg-white border-2 border-teal-500 text-teal-500 font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 hover:bg-teal-50 transition-colors"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="truncate">{prevTitle}</span>
+              </motion.button>
+            )}
 
-  <motion.button
-    onClick={onNext}
-    className={`${
-      step > 1 ? "w-1/2" : "w-full"
-    } bg-teal-500 hover:bg-teal-600 text-white font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg transition-colors`}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-  >
-    <span>Next</span>
-    <ChevronRight className="w-5 h-5" />
-  </motion.button>
-</div>
-
+            <motion.button
+              onClick={onNext}
+              className={`${
+                step > 1 ? "w-1/2" : "w-full"
+              } bg-teal-500 hover:bg-teal-600 text-white font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg transition-colors`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>Next</span>
+              <ChevronRight className="w-5 h-5" />
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </motion.div>

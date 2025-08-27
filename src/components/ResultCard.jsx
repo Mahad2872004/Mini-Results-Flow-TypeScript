@@ -23,6 +23,7 @@ const ResultCard = ({
   image,
 }) => {
   const totalSteps = 6;
+  
 
   // Get icon based on step
   const getIcon = () => {
@@ -112,7 +113,7 @@ const ResultCard = ({
               <div
                 key={idx}
                 className={`w-2 h-2 rounded-full ${
-                  step === idx + 1 ? "bg-teal-500" : "bg-gray-300"
+                  idx + 1 <= step ? "bg-teal-500" : "bg-gray-300"
                 }`}
               ></div>
             ))}

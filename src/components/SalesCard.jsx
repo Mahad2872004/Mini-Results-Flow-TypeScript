@@ -13,7 +13,33 @@ import {
 
 const SalesCard = () => {
   const [showStickyButton, setShowStickyButton] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("discount");
+  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
   const planPickerRef = useRef(null);
+
+  // Countdown timer
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // Format time for display
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,6 +58,22 @@ const SalesCard = () => {
 
   const scrollToPlanPicker = () => {
     planPickerRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePlanSelect = (planType) => {
+    setSelectedPlan(planType);
+  };
+
+  const handleContinue = () => {
+    const planData = {
+      type: selectedPlan,
+      price: selectedPlan === "payments" ? 29 : 67,
+      description:
+        selectedPlan === "payments" ? "3 payments of $29" : "1 payment of $67",
+    };
+
+    console.log("Selected plan:", planData);
+    alert(`Proceeding with ${planData.description}`);
   };
 
   return (
@@ -66,7 +108,7 @@ const SalesCard = () => {
             <img
               src="/images/dart.jpg"
               alt="Target icon with a dart"
-              className="w-10 h-10 justify-center" 
+              className="w-10 h-10 justify-center"
             />
           </div>
           <div className="text-center mb-8">
@@ -74,31 +116,13 @@ const SalesCard = () => {
               Your Personalized KetoSlim Plan Is Ready
             </h2>
 
-            {/* Before/After Illustration */}
-            <div className="flex justify-center items-center mb-6 space-x-4">
-              {/* Before Image */}
-              <div className="text-center">
-                <img
-                  src="/images/obese-middle-aged-woman Medium Background Removed.webp" 
-                  alt="Before"
-                  className="w-28 h-40 object-cover rounded-2xl shadow-md"
-                />
-                <span className="block mt-2 text-sm font-medium text-gray-600">
-                  Now
-                </span>
-              </div>
-
-              {/* After Image */}
-              <div className="text-center">
-                <img
-                  src="/images/slim-middle-aged-woman Medium Background Removed.webp" 
-                  alt="After"
-                  className="w-28 h-40 object-cover rounded-2xl shadow-md"
-                />
-                <span className="block mt-2 text-sm font-medium text-gray-600">
-                  6 Months
-                </span>
-              </div>
+            {/* Before/After Image */}
+            <div className="flex justify-center mb-6">
+              <img
+                src="/images/before_after.jpg" 
+                alt="KetoSlim Result"
+                className="w-70 h-56 object-cover rounded-2xl shadow-md"
+              />
             </div>
 
             {/* Comparison Stats */}
@@ -106,7 +130,7 @@ const SalesCard = () => {
               {/* Left Side */}
               <div>
                 <div className="font-semibold text-gray-800 mb-1">Body Fat</div>
-                <div className="text-orange-500 mb-3">20-25%</div>
+                <div className="text-rose-400 mb-3">20-25%</div>
 
                 <div className="mb-3">
                   <div className="font-medium text-gray-700">Energy Levels</div>
@@ -136,7 +160,7 @@ const SalesCard = () => {
               {/* Right Side */}
               <div>
                 <div className="font-semibold text-gray-800 mb-1">Body Fat</div>
-                <div className="text-orange-500 mb-3">10-12%</div>
+                <div className="text-teal-500 mb-3">10-12%</div>
 
                 <div className="mb-3">
                   <div className="font-medium text-gray-700">Energy Levels</div>
@@ -318,29 +342,22 @@ const SalesCard = () => {
                   Discount expires in:
                 </span>
                 <div className="flex items-center space-x-1 font-bold text-lg">
-                  <span>9:59</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"
-                    />
-                  </svg>
+                  <span>{formatTime(timeLeft)}</span>
+                  <Clock className="h-5 w-5" />
                 </div>
               </div>
             </div>
 
             {/* Pricing Options */}
             <div className="space-y-4 mb-6">
-              {/* Payments Option */}
-              <div className="border-2 border-gray-200 rounded-2xl p-4">
+              <div
+                className={`border-2 rounded-2xl p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  selectedPlan === "payments"
+                    ? "border-teal-500 bg-teal-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                onClick={() => handlePlanSelect("payments")}
+              >
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <span className="text-lg font-bold text-gray-800">
@@ -353,16 +370,31 @@ const SalesCard = () => {
                       over 2 easy payments
                     </div>
                   </div>
-                  <input
-                    type="radio"
-                    name="plan"
-                    className="w-5 h-5 text-teal-500"
-                  />
+                  {selectedPlan === "payments" ? (
+                    <div className="bg-teal-500 rounded-full p-1 flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-white" />
+                    </div>
+                  ) : (
+                    <input
+                      type="radio"
+                      name="plan"
+                      checked={selectedPlan === "payments"}
+                      onChange={() => handlePlanSelect("payments")}
+                      className="w-5 h-5 text-teal-500"
+                    />
+                  )}
                 </div>
               </div>
 
               {/* Discount Option */}
-              <div className="border-2 border-teal-500 rounded-xl p-4 bg-white relative">
+              <div
+                className={`border-2 rounded-xl p-4 bg-white relative cursor-pointer transition-all duration-200 hover:shadow-md ${
+                  selectedPlan === "discount"
+                    ? "border-teal-500 bg-teal-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+                onClick={() => handlePlanSelect("discount")}
+              >
                 <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
                   23% OFF
                 </div>
@@ -380,27 +412,26 @@ const SalesCard = () => {
                 </p>
 
                 <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-                  <div className="bg-teal-500 rounded-full p-1 flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={3}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
+                  {selectedPlan === "discount" ? (
+                    <div className="bg-teal-500 rounded-full p-1 flex items-center justify-center">
+                      <CheckCircle className="h-4 w-4 text-white" />
+                    </div>
+                  ) : (
+                    <input
+                      type="radio"
+                      name="plan"
+                      checked={selectedPlan === "discount"}
+                      onChange={() => handlePlanSelect("discount")}
+                      className="w-5 h-5 text-teal-500"
+                    />
+                  )}
                 </div>
 
-                <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-teal-500 text-black text-xs font-bold px-4 py-1 rounded-t-md">
-                  MOST POPULAR
-                </div>
+                {selectedPlan === "discount" && (
+                  <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-teal-500 text-black text-xs font-bold px-4 py-1 rounded-t-md">
+                    MOST POPULAR
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -416,7 +447,10 @@ const SalesCard = () => {
           </div>
 
           {/* Continue Button */}
-          <button className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center space-x-2 transition-colors duration-200 shadow-lg mb-4">
+          <button
+            onClick={handleContinue}
+            className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center space-x-2 transition-colors duration-200 shadow-lg mb-4"
+          >
             <span>Continue</span>
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -427,7 +461,6 @@ const SalesCard = () => {
         </div>
 
         {/* Money Back Guarantee */}
-        {/* <div className="bg-white rounded-3xl shadow-lg p-6 mb-6"> */}
         <div className="flex items-center space-x-4 mb-4">
           <div>
             <h3 className="text-lg font-bold text-gray-800 ">
@@ -471,7 +504,7 @@ const SalesCard = () => {
             until you cancel.
           </p>
           <p>
-            If you don’t cancel, KetoSlim will automatically continue your
+            If you don't cancel, KetoSlim will automatically continue your
             membership at the end of your introductory period and charge the
             membership fee of $67 quarterly until you cancel.
           </p>

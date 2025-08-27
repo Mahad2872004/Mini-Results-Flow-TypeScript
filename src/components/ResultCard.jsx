@@ -97,7 +97,7 @@ const ResultCard = ({
     >
       {/* Header */}
       <div className="max-w-md mx-auto mb-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-center mb-4">
           <div>
             <h1 className="text-2xl font-bold">
               <span className="text-teal-500">KETO</span>
@@ -140,7 +140,7 @@ const ResultCard = ({
             <p className="text-gray-600 font-medium">Here's Why That Matters</p>
           </div>
 
-          {/* Image (newly added) */}
+          {/* Image  */}
           {image && (
             <div className="flex justify-center mb-6">
               <img

@@ -447,9 +447,10 @@ const SalesCard = ({ onBack, onNoThanks }) => {
                 onClick={() => handlePlanSelect("discount")}
               >
                 {!isDiscountExpired && (
-                  <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
-                    23% OFF
-                  </div>
+                 <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+  23% OFF
+</div>
+
                 )}
 
                 {isDiscountExpired && (

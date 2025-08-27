@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import toast, { Toaster } from 'react-hot-toast';
 import {
   CheckCircle,
   Star,
@@ -11,11 +12,24 @@ import {
   Clock,
 } from "lucide-react";
 
-const SalesCard = () => {
+const SalesCard = ({ onBack, onNoThanks }) => {
   const [showStickyButton, setShowStickyButton] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("discount");
   const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
+  const [isDiscountExpired, setIsDiscountExpired] = useState(false);
   const planPickerRef = useRef(null);
+
+  // Handle browser back button for this component
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape' && onBack) {
+        onBack();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onBack]);
 
   // Countdown timer
   useEffect(() => {
@@ -25,6 +39,11 @@ const SalesCard = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
+          setIsDiscountExpired(true);
+          // Switch to payments plan if discount was selected
+          if (selectedPlan === "discount") {
+            setSelectedPlan("payments");
+          }
           return 0;
         }
         return prev - 1;
@@ -34,7 +53,6 @@ const SalesCard = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
-  // Format time for display
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -61,6 +79,10 @@ const SalesCard = () => {
   };
 
   const handlePlanSelect = (planType) => {
+    // Don't allow selecting discount plan if expired
+    if (planType === "discount" && isDiscountExpired) {
+      return;
+    }
     setSelectedPlan(planType);
   };
 
@@ -72,12 +94,39 @@ const SalesCard = () => {
         selectedPlan === "payments" ? "3 payments of $29" : "1 payment of $67",
     };
 
+    // Show toast notification based on selected plan
+    if (selectedPlan === "payments") {
+      toast.success("Thank you for continuing with the 3 Payments option!", {
+        duration: 4000,
+        position: 'top-center',
+        style: {
+          background: '#1f2937',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+    } else {
+      toast.success("Thank you for continuing with the 1 Payment option!", {
+        duration: 4000,
+        position: 'top-center',
+        style: {
+          background: '#1f2937',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+    }
+
     console.log("Selected plan:", planData);
-    alert(`Proceeding with ${planData.description}`);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Toast Container */}
+      <Toaster />
+      
       {/* Sticky Button */}
       <motion.button
         className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-lg ${
@@ -389,30 +438,46 @@ const SalesCard = () => {
               {/* Discount Option */}
               <div
                 className={`border-2 rounded-xl p-4 bg-white relative cursor-pointer transition-all duration-200 hover:shadow-md ${
-                  selectedPlan === "discount"
+                  isDiscountExpired
+                    ? "border-gray-200 bg-gray-100 cursor-not-allowed opacity-50"
+                    : selectedPlan === "discount"
                     ? "border-teal-500 bg-teal-50"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
                 onClick={() => handlePlanSelect("discount")}
               >
-                <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
-                  23% OFF
-                </div>
+                {!isDiscountExpired && (
+                  <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg">
+                    23% OFF
+                  </div>
+                )}
 
-                <div className="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-md inline-block mb-3">
+                {isDiscountExpired && (
+                  <div className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                    EXPIRED
+                  </div>
+                )}
+
+                <div className={`text-white text-xs font-bold px-3 py-1 rounded-md inline-block mb-3 ${
+                  isDiscountExpired ? "bg-gray-500" : "bg-orange-500"
+                }`}>
                   DISCOUNT
                 </div>
 
-                <p className="text-gray-800 text-sm mb-1">
+                <p className={`text-sm mb-1 ${
+                  isDiscountExpired ? "text-gray-500" : "text-gray-800"
+                }`}>
                   1 Payment of <span className="font-bold">$67</span>. Pay in
                   full today
                 </p>
-                <p className="text-gray-800 text-sm mb-4">
-                  and save $20 instantly.
+                <p className={`text-sm mb-4 ${
+                  isDiscountExpired ? "text-gray-500" : "text-gray-800"
+                }`}>
+                  {isDiscountExpired ? "Discount has expired" : "and save $20 instantly."}
                 </p>
 
                 <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-                  {selectedPlan === "discount" ? (
+                  {selectedPlan === "discount" && !isDiscountExpired ? (
                     <div className="bg-teal-500 rounded-full p-1 flex items-center justify-center">
                       <CheckCircle className="h-4 w-4 text-white" />
                     </div>
@@ -423,11 +488,12 @@ const SalesCard = () => {
                       checked={selectedPlan === "discount"}
                       onChange={() => handlePlanSelect("discount")}
                       className="w-5 h-5 text-teal-500"
+                      disabled={isDiscountExpired}
                     />
                   )}
                 </div>
 
-                {selectedPlan === "discount" && (
+                {selectedPlan === "discount" && !isDiscountExpired && (
                   <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-teal-500 text-black text-xs font-bold px-4 py-1 rounded-t-md">
                     MOST POPULAR
                   </div>
@@ -455,9 +521,12 @@ const SalesCard = () => {
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          <p className="text-xs text-gray-500 text-center underline">
+          <button
+            onClick={onNoThanks}
+            className="text-xs text-gray-500 text-center underline w-full hover:text-gray-700 transition-colors"
+          >
             No thanks, I don't want this plan.
-          </p>
+          </button>
         </div>
 
         {/* Money Back Guarantee */}

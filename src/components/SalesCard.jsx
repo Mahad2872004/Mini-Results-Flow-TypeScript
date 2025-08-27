@@ -66,7 +66,7 @@ const SalesCard = () => {
             <img
               src="/images/dart.jpg"
               alt="Target icon with a dart"
-              className="w-10 h-10 justify-center" // Tailwind classes for width and height
+              className="w-10 h-10 justify-center" 
             />
           </div>
           <div className="text-center mb-8">
@@ -79,7 +79,7 @@ const SalesCard = () => {
               {/* Before Image */}
               <div className="text-center">
                 <img
-                  src="/images/obese-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
+                  src="/images/obese-middle-aged-woman Medium Background Removed.webp" 
                   alt="Before"
                   className="w-28 h-40 object-cover rounded-2xl shadow-md"
                 />
@@ -91,7 +91,7 @@ const SalesCard = () => {
               {/* After Image */}
               <div className="text-center">
                 <img
-                  src="/images/slim-middle-aged-woman Medium Background Removed.webp" // 👈 replace with your image path
+                  src="/images/slim-middle-aged-woman Medium Background Removed.webp" 
                   alt="After"
                   className="w-28 h-40 object-cover rounded-2xl shadow-md"
                 />
@@ -197,7 +197,7 @@ const SalesCard = () => {
             </h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            {/* Left side - Features list */}
+            {/* Left side Features list */}
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <img
@@ -244,7 +244,7 @@ const SalesCard = () => {
               </div>
             </div>
 
-            {/* Right side - Mobile Mockup */}
+            {/* Right side Mobile Icon */}
             <div className="flex justify-center md:justify-end">
               <img
                 src="/images/iphone-mockup-r.webp"
@@ -304,10 +304,6 @@ const SalesCard = () => {
             </a>
           </div>
 
-          {/* Features Section */}
-
-          {/* Social Proof */}
-
           {/* Plan Picker Section */}
           <div
             ref={planPickerRef}
@@ -343,7 +339,7 @@ const SalesCard = () => {
 
             {/* Pricing Options */}
             <div className="space-y-4 mb-6">
-              {/* 3 Payments Option */}
+              {/* Payments Option */}
               <div className="border-2 border-gray-200 rounded-2xl p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div>

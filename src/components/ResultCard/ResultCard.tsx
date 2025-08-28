@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { motion } from "framer-motion";
 import {
   Scale,
@@ -11,7 +11,20 @@ import {
   ChevronLeft,
 } from "lucide-react";
 
-const ResultCard = ({
+//Props Interface
+interface ResultCardProps {
+  title: string;
+  headline: string;
+  copy: string;
+  callout?: string;
+  onNext: () => void;
+  onBack: () => void;
+  step: number;
+  prevTitle: string | null;
+  image?: string;
+}
+
+const ResultCard: React.FC<ResultCardProps> = ({
   title,
   headline,
   copy,
@@ -24,7 +37,7 @@ const ResultCard = ({
 }) => {
   const totalSteps = 6;
 
-  const icons = {
+  const icons: Record<number, JSX.Element> = {
     1: <Scale className="w-12 h-12 text-gray-400" />,
     2: <BarChart3 className="w-12 h-12 text-gray-400" />,
     3: <Flame className="w-12 h-12 text-gray-400" />,
@@ -33,7 +46,7 @@ const ResultCard = ({
     6: <Clock className="w-12 h-12 text-gray-400" />,
   };
 
-  const getCalloutColor = () => {
+  const getCalloutColor = (): string => {
     if (
       callout?.includes("Almost Healthy") ||
       callout?.includes("strong") ||
@@ -51,7 +64,7 @@ const ResultCard = ({
     return "text-teal-600";
   };
 
-  const parseHeadline = (text) => {
+  const parseHeadline = (text: string): (string | JSX.Element)[] => {
     const clean = text.replace(/[⚖️📊🔥💧📉⏳]/g, "").trim();
     return clean.split(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?)/).map((part, i) =>
       /\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?%?/.test(part) ? (

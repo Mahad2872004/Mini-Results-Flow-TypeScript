@@ -1,34 +1,34 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 import {
   CheckCircle,
-  Star,
-  Shield,
-  Award,
-  Users,
   ChevronRight,
-  ArrowRight,
   Clock,
 } from "lucide-react";
 
-const SalesCard = ({ onBack, onNoThanks }) => {
-  const [showStickyButton, setShowStickyButton] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState("discount");
-  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
-  const [isDiscountExpired, setIsDiscountExpired] = useState(false);
-  const planPickerRef = useRef(null);
+interface SalesCardProps {
+  onBack?: () => void;
+  onNoThanks?: () => void;
+}
+
+const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
+  const [showStickyButton, setShowStickyButton] = useState<boolean>(false);
+  const [selectedPlan, setSelectedPlan] = useState<"discount" | "payments">("discount");
+  const [timeLeft, setTimeLeft] = useState<number>(10 * 60); // 10 minutes in seconds
+  const [isDiscountExpired, setIsDiscountExpired] = useState<boolean>(false);
+  const planPickerRef = useRef<HTMLDivElement | null>(null);
 
   // Handle browser back button for this component
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape' && onBack) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && onBack) {
         onBack();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onBack]);
 
   // Countdown timer
@@ -51,9 +51,9 @@ const SalesCard = ({ onBack, onNoThanks }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [timeLeft, selectedPlan]);
 
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
@@ -78,7 +78,7 @@ const SalesCard = ({ onBack, onNoThanks }) => {
     planPickerRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handlePlanSelect = (planType) => {
+  const handlePlanSelect = (planType: "discount" | "payments") => {
     // Don't allow selecting discount plan if expired
     if (planType === "discount" && isDiscountExpired) {
       return;
@@ -98,23 +98,23 @@ const SalesCard = ({ onBack, onNoThanks }) => {
     if (selectedPlan === "payments") {
       toast.success("Thank you for continuing with the 3 Payments option!", {
         duration: 4000,
-        position: 'top-center',
+        position: "top-center",
         style: {
-          background: '#1f2937',
-          color: '#fff',
-          padding: '16px',
-          borderRadius: '8px',
+          background: "#1f2937",
+          color: "#fff",
+          padding: "16px",
+          borderRadius: "8px",
         },
       });
     } else {
       toast.success("Thank you for continuing with the 1 Payment option!", {
         duration: 4000,
-        position: 'top-center',
+        position: "top-center",
         style: {
-          background: '#1f2937',
-          color: '#fff',
-          padding: '16px',
-          borderRadius: '8px',
+          background: "#1f2937",
+          color: "#fff",
+          padding: "16px",
+          borderRadius: "8px",
         },
       });
     }
@@ -126,7 +126,7 @@ const SalesCard = ({ onBack, onNoThanks }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Toast Container */}
       <Toaster />
-      
+
       {/* Sticky Button */}
       <motion.button
         className={`fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-lg ${

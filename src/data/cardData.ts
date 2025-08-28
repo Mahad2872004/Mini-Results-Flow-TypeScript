@@ -1,4 +1,7 @@
-const getCardData = (formData) => [
+// src/data/cardData.ts
+import type { CardDataItem, FormData } from "../types/types";
+
+const getCardData = (formData: Partial<FormData>): CardDataItem[] => [
   {
     title: "Body Fat % Insight",
     headline: `⚖️ Your Body Fat Percentage Is ${formData.bodyFatPercent || 0}%`,
@@ -28,7 +31,7 @@ const getCardData = (formData) => [
     copy: `BMI estimates how weight affects health.\n\nHigh BMI can slow metabolism, drain energy, and make fat loss harder.`,
     callout: (() => {
       const { BMI } = formData;
-      if (!BMI) return "";
+      if (!BMI && BMI !== 0) return "";
       if (BMI < 26) return "Almost Healthy: Close to optimal, small changes help.";
       if (BMI < 35) return "Obese: Higher BMI may affect hormones and recovery.";
       return "Very Obese: BMI may lead to insulin resistance, fatigue, but change is possible.";

@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Scale,
@@ -10,19 +10,10 @@ import {
   ChevronRight,
   ChevronLeft,
 } from "lucide-react";
+import StepButton from "../../buttons/StepButton";
+import ProgressDots from "../../progressDots/ProgressDots";
+import ResultCardProps from "../../props/ResultCardProps";
 
-//Props Interface
-interface ResultCardProps {
-  title: string;
-  headline: string;
-  copy: string;
-  callout?: string;
-  onNext: () => void;
-  onBack: () => void;
-  step: number;
-  prevTitle: string | null;
-  image?: string;
-}
 
 const ResultCard: React.FC<ResultCardProps> = ({
   title,
@@ -96,16 +87,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
 
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-teal-500 text-lg font-medium">Your Results</h2>
-          <div className="flex space-x-2">
-            {Array.from({ length: totalSteps }, (_, idx) => (
-              <div
-                key={idx}
-                className={`w-2 h-2 rounded-full ${
-                  idx + 1 <= step ? "bg-teal-500" : "bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
+          <ProgressDots totalSteps={totalSteps} currentStep={step} />
         </div>
       </div>
 
@@ -142,36 +124,28 @@ const ResultCard: React.FC<ResultCardProps> = ({
           {/* Description */}
           <div className="text-sm text-gray-600 leading-relaxed mb-8 space-y-3">
             <p>{copy}</p>
-            {callout && (
-              <p className={`font-medium ${getCalloutColor()}`}>{callout}</p>
-            )}
+            {callout && <p className={`font-medium ${getCalloutColor()}`}>{callout}</p>}
           </div>
 
           {/* Navigation Buttons */}
           <div className="flex gap-4 mt-auto">
-            {step > 1 && (
-              <motion.button
+            {step > 1 && prevTitle && (
+              <StepButton
                 onClick={onBack}
-                className="w-1/2 bg-white border-2 border-teal-500 text-teal-500 font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 hover:bg-teal-50 transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="w-1/2 bg-white border-2 border-teal-500 text-teal-500 hover:bg-teal-50"
+                iconLeft={<ChevronLeft className="w-5 h-5" />}
               >
-                <ChevronLeft className="w-5 h-5" />
-                <span className="truncate">{prevTitle}</span>
-              </motion.button>
+                {prevTitle}
+              </StepButton>
             )}
 
-            <motion.button
+            <StepButton
               onClick={onNext}
-              className={`${
-                step > 1 ? "w-1/2" : "w-full"
-              } bg-teal-500 hover:bg-teal-600 text-white font-semibold py-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg transition-colors`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className={`${step > 1 ? "w-1/2" : "w-full"} bg-teal-500 hover:bg-teal-600 text-white shadow-lg`}
+              iconRight={<ChevronRight className="w-5 h-5" />}
             >
-              <span>Next</span>
-              <ChevronRight className="w-5 h-5" />
-            </motion.button>
+              Next
+            </StepButton>
           </div>
         </motion.div>
       </div>

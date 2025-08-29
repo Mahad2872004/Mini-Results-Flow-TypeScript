@@ -6,13 +6,11 @@ import {
   ChevronRight,
   Clock,
 } from "lucide-react";
-
-interface SalesCardProps {
-  onBack?: () => void;
-  onNoThanks?: () => void;
-}
+import SalesCardProps from "../../props/SalesCardProps";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
+  const { darkMode } = useDarkMode();
   const [showStickyButton, setShowStickyButton] = useState<boolean>(false);
   const [selectedPlan, setSelectedPlan] = useState<"discount" | "payments">("discount");
   const [timeLeft, setTimeLeft] = useState<number>(10 * 60); // 10 minutes in seconds
@@ -95,35 +93,27 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
     };
 
     // Show toast notification based on selected plan
-    if (selectedPlan === "payments") {
-      toast.success("Thank you for continuing with the 3 Payments option!", {
+    toast.success(
+      `Thank you for continuing with the ${selectedPlan === "payments" ? "3 Payments" : "1 Payment"} option!`,
+      {
         duration: 4000,
         position: "top-center",
         style: {
-          background: "#1f2937",
+          background: darkMode ? "#111827" : "#1f2937",
           color: "#fff",
           padding: "16px",
           borderRadius: "8px",
         },
-      });
-    } else {
-      toast.success("Thank you for continuing with the 1 Payment option!", {
-        duration: 4000,
-        position: "top-center",
-        style: {
-          background: "#1f2937",
-          color: "#fff",
-          padding: "16px",
-          borderRadius: "8px",
-        },
-      });
-    }
+      }
+    );
 
     console.log("Selected plan:", planData);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"
+    }`}>
       {/* Toast Container */}
       <Toaster />
 
@@ -147,12 +137,14 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
         <div className="text-center mb-8 pt-8">
           <h1 className="text-3xl font-bold mb-2">
             <span className="text-teal-500">KETO</span>
-            <span className="text-gray-800">SLIM</span>
+            <span className={darkMode ? "text-gray-100" : "text-gray-800"}>SLIM</span>
           </h1>
         </div>
 
         {/* Hero Section */}
-        <div className="bg-white rounded-3xl shadow-lg p-8 mb-6">
+        <div className={`rounded-3xl shadow-lg p-8 mb-6 transition-colors duration-300 ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}>
           <div className="flex justify-center items-center mb-4">
             <img
               src="/images/dart.jpg"
@@ -161,7 +153,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
             />
           </div>
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            <h2 className={`text-2xl font-bold mb-4 ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}>
               Your Personalized KetoSlim Plan Is Ready
             </h2>
 
@@ -178,60 +172,88 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
             <div className="grid grid-cols-2 gap-4 text-sm mb-6">
               {/* Left Side */}
               <div>
-                <div className="font-semibold text-gray-800 mb-1">Body Fat</div>
+                <div className={`font-semibold mb-1 ${
+                  darkMode ? "text-gray-100" : "text-gray-800"
+                }`}>Body Fat</div>
                 <div className="text-rose-400 mb-3">20-25%</div>
 
                 <div className="mb-3">
-                  <div className="font-medium text-gray-700">Energy Levels</div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>Energy Levels</div>
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-1/4 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <div className="font-medium text-gray-700">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>
                     Physical Health
                   </div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-1/6 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div className="font-medium text-gray-700">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>
                     Metabolism Speed
                   </div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-1/6 h-2 bg-rose-300 rounded-full"></div>
                   </div>
                 </div>
               </div>
               {/* Right Side */}
               <div>
-                <div className="font-semibold text-gray-800 mb-1">Body Fat</div>
+                <div className={`font-semibold mb-1 ${
+                  darkMode ? "text-gray-100" : "text-gray-800"
+                }`}>Body Fat</div>
                 <div className="text-teal-500 mb-3">10-12%</div>
 
                 <div className="mb-3">
-                  <div className="font-medium text-gray-700">Energy Levels</div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>Energy Levels</div>
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-5/6 h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
 
                 <div className="mb-3">
-                  <div className="font-medium text-gray-700">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>
                     Physical Health
                   </div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-full h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div className="font-medium text-gray-700">
+                  <div className={`font-medium ${
+                    darkMode ? "text-gray-200" : "text-gray-700"
+                  }`}>
                     Metabolism Speed
                   </div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
+                  <div className={`w-full h-2 rounded-full ${
+                    darkMode ? "bg-gray-600" : "bg-gray-200"
+                  }`}>
                     <div className="w-full h-2 bg-teal-400 rounded-full"></div>
                   </div>
                 </div>
@@ -241,31 +263,25 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
 
           {/* Program Benefits */}
           <div className="mb-8">
-            <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
+            <h3 className={`text-lg font-bold mb-4 text-center ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}>
               Your program will also work on:
             </h3>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-orange-500" />
-                <span className="text-gray-700">Improving Digestion</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-orange-500" />
-                <span className="text-gray-700">Toning Muscles</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-orange-500" />
-                <span className="text-gray-700">Mental Wellness Reset</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <CheckCircle className="w-5 h-5 text-orange-500" />
-                <span className="text-gray-700">Physical Confidence Boost</span>
-              </div>
+              {["Improving Digestion", "Toning Muscles", "Mental Wellness Reset", "Physical Confidence Boost"].map((benefit, i) => (
+                <div key={i} className="flex items-center space-x-3">
+                  <CheckCircle className="w-5 h-5 text-orange-500" />
+                  <span className={darkMode ? "text-gray-200" : "text-gray-700"}>{benefit}</span>
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="text-center mb-6">
-            <h3 className="text-lg font-bold text-gray-800 mb-4 text-center">
+            <h3 className={`text-lg font-bold mb-4 text-center ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}>
               Get all the right tools & knowledge.
             </h3>
           </div>
@@ -327,7 +343,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
             </div>
           </div>
 
-          <h3 className="text-lg font-bold text-gray-800 mb-4 text-center mt-10">
+          <h3 className={`text-lg font-bold mb-4 text-center mt-10 ${
+            darkMode ? "text-gray-100" : "text-gray-800"
+          }`}>
             Trusted by health & nutrition professionals
           </h3>
 
@@ -339,7 +357,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
             />
           </div>
 
-          <div className="text-sm text-gray-600 mb-4 ">
+          <div className={`text-sm mb-4 ${
+            darkMode ? "text-gray-300" : "text-gray-600"
+          }`}>
             <p className="mb-2">
               There is evidence to suggest that a Ketogenic Diet can help with
               weight loss, visceral adiposity, and appetite control.
@@ -362,7 +382,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
             />
           </div>
 
-          <div className="text-sm text-gray-600">
+          <div className={`text-sm ${
+            darkMode ? "text-gray-300" : "text-gray-600"
+          }`}>
             <p>
               Research shows that a keto diet can result in weight loss and
               improvements in cardiovascular risk factors.
@@ -380,10 +402,14 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
           {/* Plan Picker Section */}
           <div
             ref={planPickerRef}
-            className="bg-white rounded-3xl shadow-lg p-6 mb-6 mt-6"
+            className={`rounded-3xl shadow-lg p-6 mb-6 mt-6 transition-colors duration-300 ${
+              darkMode ? "bg-gray-700" : "bg-white"
+            }`}
           >
             <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-gray-600 mb-2">
+              <h3 className={`text-xl font-bold mb-2 ${
+                darkMode ? "text-gray-100" : "text-gray-600"
+              }`}>
                 3 Month Custom Keto Plan
               </h3>
               <div className="flex items-center justify-between bg-orange-500 text-white rounded-full px-4 py-2 w-full">
@@ -402,20 +428,26 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
               <div
                 className={`border-2 rounded-2xl p-4 cursor-pointer transition-all duration-200 hover:shadow-md ${
                   selectedPlan === "payments"
-                    ? "border-teal-500 bg-teal-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? `border-teal-500 ${darkMode ? "bg-teal-900" : "bg-teal-50"}`
+                    : `${darkMode ? "border-gray-600 hover:border-gray-500 bg-gray-800" : "border-gray-200 hover:border-gray-300 bg-white"}`
                 }`}
                 onClick={() => handlePlanSelect("payments")}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <span className="text-lg font-bold text-gray-800">
+                    <span className={`text-lg font-bold ${
+                      darkMode ? "text-gray-100" : "text-gray-800"
+                    }`}>
                       3 PAYMENTS OF $29
                     </span>
-                    <div className="text-sm text-gray-600">
+                    <div className={`text-sm ${
+                      darkMode ? "text-gray-300" : "text-gray-600"
+                    }`}>
                       Just $29 today. Split the rest
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className={`text-sm ${
+                      darkMode ? "text-gray-400" : "text-gray-500"
+                    }`}>
                       over 2 easy payments
                     </div>
                   </div>
@@ -437,20 +469,19 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
 
               {/* Discount Option */}
               <div
-                className={`border-2 rounded-xl p-4 bg-white relative cursor-pointer transition-all duration-200 hover:shadow-md ${
+                className={`border-2 rounded-xl p-4 relative cursor-pointer transition-all duration-200 hover:shadow-md ${
                   isDiscountExpired
-                    ? "border-gray-200 bg-gray-100 cursor-not-allowed opacity-50"
+                    ? `${darkMode ? "border-gray-600 bg-gray-700 opacity-50" : "border-gray-200 bg-gray-100 opacity-50"} cursor-not-allowed`
                     : selectedPlan === "discount"
-                    ? "border-teal-500 bg-teal-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? `border-teal-500 ${darkMode ? "bg-teal-900" : "bg-teal-50"}`
+                    : `${darkMode ? "border-gray-600 hover:border-gray-500 bg-gray-800" : "border-gray-200 hover:border-gray-300 bg-white"}`
                 }`}
                 onClick={() => handlePlanSelect("discount")}
               >
                 {!isDiscountExpired && (
-                 <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
-  23% OFF
-</div>
-
+                  <div className="absolute top-0 right-0 bg-teal-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                    23% OFF
+                  </div>
                 )}
 
                 {isDiscountExpired && (
@@ -466,13 +497,17 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
                 </div>
 
                 <p className={`text-sm mb-1 ${
-                  isDiscountExpired ? "text-gray-500" : "text-gray-800"
+                  isDiscountExpired 
+                    ? darkMode ? "text-gray-500" : "text-gray-500"
+                    : darkMode ? "text-gray-200" : "text-gray-800"
                 }`}>
                   1 Payment of <span className="font-bold">$67</span>. Pay in
                   full today
                 </p>
                 <p className={`text-sm mb-4 ${
-                  isDiscountExpired ? "text-gray-500" : "text-gray-800"
+                  isDiscountExpired 
+                    ? darkMode ? "text-gray-500" : "text-gray-500"
+                    : darkMode ? "text-gray-200" : "text-gray-800"
                 }`}>
                   {isDiscountExpired ? "Discount has expired" : "and save $20 instantly."}
                 </p>
@@ -507,7 +542,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
           <div className="space-y-3 mb-6">
             <div className="flex items-center space-x-3">
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span className="text-sm text-gray-700">
+              <span className={`text-sm ${
+                darkMode ? "text-gray-200" : "text-gray-700"
+              }`}>
                 Risk-Free 60-Day Money-Back Guarantee
               </span>
             </div>
@@ -524,7 +561,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
 
           <button
             onClick={onNoThanks}
-            className="text-xs text-gray-500 text-center underline w-full hover:text-gray-700 transition-colors"
+            className={`text-xs text-center underline w-full transition-colors ${
+              darkMode ? "text-gray-300 hover:text-gray-100" : "text-gray-500 hover:text-gray-700"
+            }`}
           >
             No thanks, I don't want this plan.
           </button>
@@ -533,7 +572,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
         {/* Money Back Guarantee */}
         <div className="flex items-center space-x-4 mb-4">
           <div>
-            <h3 className="text-lg font-bold text-gray-800 ">
+            <h3 className={`text-lg font-bold ${
+              darkMode ? "text-gray-100" : "text-gray-800"
+            }`}>
               Money Back Guarantee
             </h3>
           </div>
@@ -546,7 +587,9 @@ const SalesCard: React.FC<SalesCardProps> = ({ onBack, onNoThanks }) => {
           </div>
         </div>
 
-        <div className="text-sm text-gray-600 space-y-3">
+        <div className={`text-sm space-y-3 ${
+          darkMode ? "text-gray-300" : "text-gray-600"
+        }`}>
           <p>
             We are confident with our service quality and this is why we offer
             you a 60-day money-back guarantee. If you are not happy with your

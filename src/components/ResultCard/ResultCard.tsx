@@ -13,7 +13,7 @@ import {
 import StepButton from "../../buttons/StepButton";
 import ProgressDots from "../../progressDots/ProgressDots";
 import ResultCardProps from "../../props/ResultCardProps";
-
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ResultCard: React.FC<ResultCardProps> = ({
   title,
@@ -26,6 +26,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   prevTitle,
   image,
 }) => {
+  const { darkMode } = useDarkMode();
   const totalSteps = 6;
 
   const icons: Record<number, JSX.Element> = {
@@ -70,7 +71,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
 
   return (
     <motion.div
-      className="min-h-screen bg-gray-50 p-4"
+      className={`min-h-screen p-4 transition-colors duration-300 ${
+        darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"
+      }`}
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -100 }}
@@ -81,7 +84,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <div className="flex justify-center mb-4">
           <h1 className="text-2xl font-bold">
             <span className="text-teal-500">KETO</span>
-            <span className="text-gray-800">SLIM</span>
+            <span className={darkMode ? "text-gray-100" : "text-gray-800"}>
+              SLIM
+            </span>
           </h1>
         </div>
 
@@ -94,7 +99,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
       {/* Main Card */}
       <div className="max-w-md mx-auto">
         <motion.div
-          className="bg-white rounded-3xl shadow-lg p-8 flex flex-col justify-between h-[700px]"
+          className={`rounded-3xl shadow-lg p-8 flex flex-col justify-between h-[700px] transition-colors duration-300 ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
@@ -104,10 +111,20 @@ const ResultCard: React.FC<ResultCardProps> = ({
 
           {/* Title */}
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-2">
+            <h3
+              className={`text-2xl font-bold mb-2 ${
+                darkMode ? "text-gray-100" : "text-gray-800"
+              }`}
+            >
               {parseHeadline(headline)}
             </h3>
-            <p className="text-gray-600 font-medium">Here's Why That Matters</p>
+            <p
+              className={`font-medium ${
+                darkMode ? "text-gray-300" : "text-gray-600"
+              }`}
+            >
+              Here's Why That Matters
+            </p>
           </div>
 
           {/* Image */}
@@ -122,9 +139,15 @@ const ResultCard: React.FC<ResultCardProps> = ({
           )}
 
           {/* Description */}
-          <div className="text-sm text-gray-600 leading-relaxed mb-8 space-y-3">
+          <div
+            className={`text-sm leading-relaxed mb-8 space-y-3 ${
+              darkMode ? "text-gray-300" : "text-gray-600"
+            }`}
+          >
             <p>{copy}</p>
-            {callout && <p className={`font-medium ${getCalloutColor()}`}>{callout}</p>}
+            {callout && (
+              <p className={`font-medium ${getCalloutColor()}`}>{callout}</p>
+            )}
           </div>
 
           {/* Navigation Buttons */}
@@ -132,7 +155,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
             {step > 1 && prevTitle && (
               <StepButton
                 onClick={onBack}
-                className="w-1/2 bg-white border-2 border-teal-500 text-teal-500 hover:bg-teal-50"
+                className={`w-1/2 border-2 border-teal-500 text-teal-500 hover:bg-teal-50 ${
+                  darkMode ? "bg-gray-700" : "bg-white"
+                }`}
                 iconLeft={<ChevronLeft className="w-5 h-5" />}
               >
                 {prevTitle}
@@ -141,7 +166,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
 
             <StepButton
               onClick={onNext}
-              className={`${step > 1 ? "w-1/2" : "w-full"} bg-teal-500 hover:bg-teal-600 text-white shadow-lg`}
+              className={`${
+                step > 1 ? "w-1/2" : "w-full"
+              } bg-teal-500 hover:bg-teal-600 text-white shadow-lg`}
               iconRight={<ChevronRight className="w-5 h-5" />}
             >
               Next

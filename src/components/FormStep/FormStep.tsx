@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import axios from "axios";
 import type { FormData } from "../../types/types";
 import FormInput from "../../Inputs/FormInput";
 import { useDarkMode } from "../../context/DarkModeContext";
+import toast from "react-hot-toast";
 
 interface FormStepProps {
   onNext: (data: FormData) => void;
@@ -19,12 +21,33 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
   });
 
   const { darkMode } = useDarkMode();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onNext(formData);
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/form/",
+        formData
+      );
+      console.log("Submission response:", response.data);
+
+      // Pass form data to parent step
+      onNext(formData);
+
+      alert("Submission created successfully!");
+    } catch (error) {
+      console.error("Error creating submission:", error);
+      alert("Failed to create submission. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Validation check
   const isFormValid = (): boolean => {
     return (
       formData.gender !== "" &&
@@ -51,10 +74,13 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
         >
           <h1 className="text-2xl font-bold text-center mb-2">
             <span className="text-teal-500">KETO</span>
-            <span className={darkMode ? "text-gray-100" : "text-gray-800"}>
+            <span
+              className={darkMode ? "text-gray-100" : "text-gray-800"}
+            >
               SLIM
             </span>
           </h1>
+
           <p
             className={`text-center mb-8 ${
               darkMode ? "text-gray-300" : "text-gray-600"
@@ -64,6 +90,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Gender */}
             <FormInput
               label="Gender"
               type="radio"
@@ -78,6 +105,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Body Fat */}
             <FormInput
               label="Body Fat %"
               type="range"
@@ -89,6 +117,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* BMI */}
             <FormInput
               label="BMI"
               type="range"
@@ -101,6 +130,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Calorie Target */}
             <FormInput
               label="Daily Calorie Target"
               type="number"
@@ -110,6 +140,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Water Intake */}
             <FormInput
               label="Cups of Water Per Day"
               type="select"
@@ -126,6 +157,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Weight Loss Rate */}
             <FormInput
               label="Weekly Weight Loss Goal (lbs)"
               type="number"
@@ -136,6 +168,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Days to See Results */}
             <FormInput
               label="Days to See Results"
               type="number"
@@ -146,9 +179,10 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
               }
             />
 
+            {/* Submit Button */}
             <button
               type="submit"
-              disabled={!isFormValid()}
+              disabled={!isFormValid() || loading}
               className={`w-full font-semibold py-4 rounded-2xl transition-colors duration-200 shadow-lg ${
                 isFormValid()
                   ? darkMode
@@ -157,7 +191,7 @@ const FormStep: React.FC<FormStepProps> = ({ onNext }) => {
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
             >
-              Get My Results
+              {loading ? "Submitting..." : "Get My Results"}
             </button>
           </form>
         </div>

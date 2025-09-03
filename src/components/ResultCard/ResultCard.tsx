@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Scale,
@@ -12,22 +12,41 @@ import {
 } from "lucide-react";
 import StepButton from "../../buttons/StepButton";
 import ProgressDots from "../../progressDots/ProgressDots";
-import ResultCardProps from "../../props/ResultCardProps";
 import { useDarkMode } from "../../context/DarkModeContext";
+import getCardData from "../../data/cardData";
+import type { CardDataItem } from "../../types/types";
+import { useNavigate } from "react-router-dom"; // 🔥 Import navigate
 
-const ResultCard: React.FC<ResultCardProps> = ({
-  title,
-  headline,
-  copy,
-  callout,
-  onNext,
-  onBack,
-  step,
-  prevTitle,
-  image,
-}) => {
+const ResultCard: React.FC = () => {
   const { darkMode } = useDarkMode();
+  const [cards, setCards] = useState<CardDataItem[]>([]);
+  const [step, setStep] = useState(1);
   const totalSteps = 6;
+  const navigate = useNavigate(); // 🔥 Initialize navigate
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getCardData();
+      setCards(data);
+    };
+    fetchData();
+  }, []);
+
+  const handleNext = () => {
+    if (step < totalSteps) {
+      setStep((prev) => prev + 1);
+    } else {
+      navigate("/sales"); // 🔥 Redirect to Sales page
+    }
+  };
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep((prev) => prev - 1);
+    }
+  };
+
+  const card = cards[step - 1];
 
   const icons: Record<number, JSX.Element> = {
     1: <Scale className="w-12 h-12 text-gray-400" />,
@@ -38,21 +57,12 @@ const ResultCard: React.FC<ResultCardProps> = ({
     6: <Clock className="w-12 h-12 text-gray-400" />,
   };
 
-  const getCalloutColor = (): string => {
-    if (
-      callout?.includes("Almost Healthy") ||
-      callout?.includes("strong") ||
-      callout?.includes("faster")
-    ) {
+  const getCalloutColor = (callout?: string): string => {
+    if (!callout) return "";
+    if (callout.includes("Almost Healthy") || callout.includes("faster"))
       return "text-green-600";
-    }
-    if (
-      callout?.includes("Obese") ||
-      callout?.includes("closer") ||
-      callout?.includes("hydration")
-    ) {
+    if (callout.includes("Obese") || callout.includes("closer"))
       return "text-orange-600";
-    }
     return "text-teal-600";
   };
 
@@ -69,6 +79,8 @@ const ResultCard: React.FC<ResultCardProps> = ({
     );
   };
 
+  if (!card) return <p className="text-center text-lg">Loading results...</p>;
+
   return (
     <motion.div
       className={`min-h-screen p-4 transition-colors duration-300 ${
@@ -79,7 +91,6 @@ const ResultCard: React.FC<ResultCardProps> = ({
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Header */}
       <div className="max-w-md mx-auto mb-6">
         <div className="flex justify-center mb-4">
           <h1 className="text-2xl font-bold">
@@ -96,7 +107,6 @@ const ResultCard: React.FC<ResultCardProps> = ({
         </div>
       </div>
 
-      {/* Main Card */}
       <div className="max-w-md mx-auto">
         <motion.div
           className={`rounded-3xl shadow-lg p-8 flex flex-col justify-between h-[700px] transition-colors duration-300 ${
@@ -106,17 +116,15 @@ const ResultCard: React.FC<ResultCardProps> = ({
           animate={{ scale: 1 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Icon */}
           <div className="flex justify-center mb-4">{icons[step]}</div>
 
-          {/* Title */}
           <div className="text-center mb-6">
             <h3
               className={`text-2xl font-bold mb-2 ${
                 darkMode ? "text-gray-100" : "text-gray-800"
               }`}
             >
-              {parseHeadline(headline)}
+              {parseHeadline(card.headline)}
             </h3>
             <p
               className={`font-medium ${
@@ -127,51 +135,50 @@ const ResultCard: React.FC<ResultCardProps> = ({
             </p>
           </div>
 
-          {/* Image */}
-          {image && (
+          {card.image && (
             <div className="flex justify-center mb-6">
               <img
-                src={image}
+                src={card.image}
                 alt="Result illustration"
                 className="max-h-48 object-contain"
               />
             </div>
           )}
 
-          {/* Description */}
           <div
             className={`text-sm leading-relaxed mb-8 space-y-3 ${
               darkMode ? "text-gray-300" : "text-gray-600"
             }`}
           >
-            <p>{copy}</p>
-            {callout && (
-              <p className={`font-medium ${getCalloutColor()}`}>{callout}</p>
+            <p>{card.copy}</p>
+            {card.callout && (
+              <p className={`font-medium ${getCalloutColor(card.callout)}`}>
+                {card.callout}
+              </p>
             )}
           </div>
 
-          {/* Navigation Buttons */}
           <div className="flex gap-4 mt-auto">
-            {step > 1 && prevTitle && (
+            {step > 1 && (
               <StepButton
-                onClick={onBack}
+                onClick={handleBack}
                 className={`w-1/2 border-2 border-teal-500 text-teal-500 hover:bg-teal-50 ${
                   darkMode ? "bg-gray-700" : "bg-white"
                 }`}
                 iconLeft={<ChevronLeft className="w-5 h-5" />}
               >
-                {prevTitle}
+                Back
               </StepButton>
             )}
 
             <StepButton
-              onClick={onNext}
+              onClick={handleNext}
               className={`${
                 step > 1 ? "w-1/2" : "w-full"
               } bg-teal-500 hover:bg-teal-600 text-white shadow-lg`}
               iconRight={<ChevronRight className="w-5 h-5" />}
             >
-              Next
+              {step === totalSteps ? "Go to Sales" : "Next"}
             </StepButton>
           </div>
         </motion.div>

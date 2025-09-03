@@ -9,13 +9,13 @@ const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined
 
 export function DarkModeProvider({ children }: { children: ReactNode }) {
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    // ✅ Load saved theme from localStorage on first render
+    //Load saved theme from localStorage on first render
     const stored = localStorage.getItem("darkMode");
     return stored ? JSON.parse(stored) : false;
   });
 
   useEffect(() => {
-    // ✅ Save to localStorage whenever theme changes
+    //Save to localStorage whenever theme changes
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
